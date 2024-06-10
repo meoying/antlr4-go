@@ -96,11 +96,12 @@ func (prc *BaseParserRuleContext) GetText() string {
 		return ""
 	}
 
-	var s string
-	for _, child := range prc.children {
-		s += child.(ParseTree).GetText()
+	// TODO 后续用 buffer pool 来优化
+	var s = prc.children[0].(ParseTree).GetText()
+	for i := 1; i < len(prc.children); i++ {
+		child := prc.children[i]
+		s += " " + child.(ParseTree).GetText()
 	}
-
 	return s
 }
 
